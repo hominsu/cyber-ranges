@@ -27,8 +27,10 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     needs: [ set-matrix ]
-
     strategy:
       matrix: ${{fromJSON(needs.set-matrix.outputs.matrix)}}
 
@@ -66,7 +68,7 @@ jobs:
 
       - name: Build ${{ matrix.platforms }}
         run: |
-          REPO=${{ matrix.push_link }} docker buildx bake --file app/docker-bake.hcl --push --set "*.platform=linux/arm64,linux/amd64"
+          REPO=${{ matrix.push_link }} docker buildx bake --file docker-bake.hcl --push --set "*.platform=linux/arm64,linux/amd64"
 
   deploy:
     name: Deploy
