@@ -10,8 +10,10 @@ services:
       - sh
       - -c
       - |
-        # Start the mysql
+        # start the mysql
         /etc/init.d/mysql start
+        # start the apache2
+        /etc/init.d/apache2 start
         # keep container running
         tail -f /dev/null
     restart: unless-stopped
