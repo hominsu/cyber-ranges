@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  sqli-labs:
+    image: hominsu/sqli-labs:latest
+    container_name: sqli-labs
+    tty: true
+    stdin_open: true
+    command:
+      - sh
+      - -c
+      - |
+        # Start the mysql
+        /etc/init.d/mysql start
+        # keep container running
+        tail -f /dev/null
+    restart: unless-stopped
+    environment:
+      TZ: "Asia/Shanghai"
+    ports:
+      - "80:80"
+    networks:
+      net:
+        aliases:
+          - sqli-labs
+
+networks:
+  net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/24
