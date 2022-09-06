@@ -1,4 +1,4 @@
-FROM alpine:latest as source
+FROM alpine:latest as tarball
 
 ARG PREFIX=/sqli-labs
 
@@ -20,7 +20,7 @@ LABEL author=${AUTHOR_NAME} email=${AUTHOR_EMAIL}
 ARG PREFIX=/var/www/html
 ARG DIR=sqli-labs
 
-COPY --from=source /sqli-labs ${PREFIX}/${DIR}
+COPY --from=tarball /sqli-labs ${PREFIX}/${DIR}
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt-get install -y --no-install-recommends \
@@ -35,7 +35,7 @@ RUN apt-get update && \
 # https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
 STOPSIGNAL SIGWINCH
 
-COPY foreground.sh /usr/local/bin/
+COPY utils/foreground.sh /usr/local/bin/
 
 EXPOSE 80
 CMD ["foreground.sh"]
