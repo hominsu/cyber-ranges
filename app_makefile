@@ -1,0 +1,14 @@
+REPO=hominsu
+AUTHOR_NAME=hominsu
+AUTHOR_EMAIL=hominsu@foxmail.com
+
+IMG_TAG=$(shell a=`basename $$PWD` && echo $$a)
+
+.PHONY: build
+# build image
+build:
+	docker build \
+	--build-arg AUTHOR_NAME=$(AUTHOR_NAME) \
+	--build-arg AUTHOR_EMAIL=$(AUTHOR_EMAIL) \
+	--file Dockerfile \
+	--tag $(REPO)/$(IMG_TAG) .
