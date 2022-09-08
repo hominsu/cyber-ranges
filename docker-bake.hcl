@@ -43,7 +43,7 @@ target "runtime" {
     AUTHOR_EMAIL = "${AUTHOR_EMAIL}"
   }
   tags = [
-    notequal("", RUNTIME_VERSION) ? "${REPO}/pikachu:runtime-${RUNTIME_VERSION}" : "",
+    notequal("", RUNTIME_VERSION) ? "${REPO}/cyber-ranges:runtime-${RUNTIME_VERSION}" : "",
     "${REPO}/cyber-ranges:runtime",
   ]
   platforms = ["linux/arm64", "linux/arm", "linux/amd64", "linux/386"]
