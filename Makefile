@@ -1,19 +1,17 @@
-REPO=hominsu
-AUTHOR_NAME=hominsu
-AUTHOR_EMAIL=hominsu@foxmail.com
-
-IMG_RELATIVE_PATH=$(shell a=`basename $$PWD` && cd .. && b=`basename $$PWD` && cd .. && c=`basename $$PWD` && echo $$c/$$b)
-
-DOCKER_IMAGE=$(REPO)/$(shell echo $(APP_NAME) |awk -F '@' '{print $$0 ":$(IMG_TAG)"}')
+.PHONY: pikachu
+# build pikachu
+pikachu:
+	bash -c 'cd app/pikachu && pwd && $(MAKE) build'
 
 .PHONY: sqli-labs
-# build sqli-labs images for current platform via docker
+# build sqli-labs
 sqli-labs:
-	docker build \
-	--build-arg AUTHOR_NAME=$(AUTHOR_NAME) \
-	--build-arg AUTHOR_EMAIL=$(AUTHOR_EMAIL) \
-	--file Dockerfile \
-	--tag $(DOCKER_IMAGE) .
+	bash -c 'cd app/sqli-labs && pwd && $(MAKE) build'
+
+.PHONY: all
+# build all images
+all:
+	find app -mindepth 1 -maxdepth 1 -type d -print | sort | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) build'
 
 # show help
 help:
