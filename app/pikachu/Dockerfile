@@ -1,20 +1,17 @@
 # syntax=docker/dockerfile:1.4
 
 # fetch tarball
-FROM alpine:latest as tarball
+FROM hominsu/cyber-ranges:runtime-tarball as tarball
 
 ARG PREFIX=/pikachu
 
-RUN apk update && \
-    apk add --no-cache ca-certificates curl && \
-    mkdir ${PREFIX} && cd ${PREFIX} && \
+RUN mkdir ${PREFIX} && cd ${PREFIX} && \
     curl -sL https://github.com/zhuifengshaonianhanlu/pikachu/tarball/master | \
     tar -zx --strip-components=1 && \
     hash -r
 
 # pikachu
-FROM hominsu/cyber-ranges:runtime
-
+FROM hominsu/cyber-ranges:runtime-mysql
 # image info
 ARG AUTHOR_NAME
 ARG AUTHOR_EMAIL
