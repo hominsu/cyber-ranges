@@ -65,4 +65,4 @@ jobs:
 
       - name: Build ${{ matrix.platforms }}
         run: |
-          REPO=${{ matrix.push_link }} SQLI_LABS_VERSION=${{ needs.set-matrix.outputs.git_tag }} docker buildx bake --file docker-bake.hcl --push xss-labs
+          REPO=${{ matrix.push_link }} SQLI_LABS_VERSION=${{ needs.set-matrix.outputs.git_tag }} docker buildx bake --file docker-bake.hcl --push --set "*.platform=linux/arm64,linux/amd64,linux/386,linux/arm" xss-labs
