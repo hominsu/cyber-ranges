@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  xss-labs:
+    image: hominsu/xss-labs:latest
+    container_name: xss-labs
+    restart: unless-stopped
+    environment:
+      TZ: "Asia/Shanghai"
+    ports:
+      - "80:80"
