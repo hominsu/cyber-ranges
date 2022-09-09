@@ -12,7 +12,6 @@ RUN mkdir ${PREFIX} && cd ${PREFIX} && \
 
 # pikachu
 FROM hominsu/cyber-ranges:runtime-mysql
-
 # image info
 ARG AUTHOR_NAME
 ARG AUTHOR_EMAIL

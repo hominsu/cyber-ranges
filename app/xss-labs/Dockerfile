@@ -12,7 +12,6 @@ RUN mkdir ${PREFIX} && cd ${PREFIX} && \
 
 # xss-labs
 FROM hominsu/cyber-ranges:runtime-native
-
 # image info
 ARG AUTHOR_NAME
 ARG AUTHOR_EMAIL
