@@ -1,0 +1,68 @@
+name: runtime-tarball
+
+on:
+  push:
+    tags: [ 'runtime-tarball-v*.*.*' ]
+
+jobs:
+  set-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      git_tag: ${{ steps.git_info.outputs.tag }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - id: set-matrix
+        run: |
+          JSON=$(cat .github/workflows/repo-setting.json | tr '\n' ' ' | sed 's/ //g')
+          echo "::set-output name=matrix::$JSON"
+
+      - id: git_info
+        run: |
+          tag=$(echo ${{ github.ref }} | rev | cut -d- -f1 | rev)
+          echo "::set-output name=tag::$tag"
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: [ set-matrix ]
+    strategy:
+      matrix: ${{fromJSON(needs.set-matrix.outputs.matrix)}}
+
+    env:
+      id: ${{ secrets[matrix.id] }}
+      token: ${{ secrets[matrix.token] }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log into Registry ${{ matrix.name }}
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ matrix.register }}
+          username: ${{ env.id }}
+          password: ${{ env.token }}
+
+      - name: Set Up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v2
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+
+      - name: Build ${{ matrix.platforms }}
+        run: |
+          REPO=${{ matrix.push_link }} RUNTIME_TARBALL_VERSION=${{ needs.set-matrix.outputs.git_tag }} docker buildx bake --file docker-bake.hcl --push --set "*.platform=linux/arm64,linux/amd64,linux/386,linux/arm" runtime-tarball
