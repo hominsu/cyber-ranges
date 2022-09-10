@@ -67,7 +67,6 @@ target "runtime-mysql" {
   context  = "app/runtime/"
   contexts = {
     "utils" = "utils"
-    "hominsu/cyber-ranges:runtime-native" = "target:runtime-native"
   }
   dockerfile = "mysql.dockerfile"
   args       = {
@@ -82,7 +81,7 @@ target "runtime-mysql" {
 }
 
 target "runtime-tarball" {
-  context  = "app/runtime/"
+  context    = "app/runtime/"
   dockerfile = "tarball.dockerfile"
   args       = {
     AUTHOR_NAME  = AUTHOR_NAME
@@ -96,11 +95,7 @@ target "runtime-tarball" {
 }
 
 target "pikachu" {
-  context  = "app/pikachu/"
-  contexts = {
-    "hominsu/cyber-ranges:runtime-mysql" = "target:runtime-mysql"
-    "hominsu/cyber-ranges:runtime-tarball" = "target:runtime-tarball"
-  }
+  context    = "app/pikachu/"
   dockerfile = "Dockerfile"
   args       = {
     REPO         = REPO
@@ -115,11 +110,7 @@ target "pikachu" {
 }
 
 target "sqli-labs" {
-  context  = "app/sqli-labs/"
-  contexts = {
-    "hominsu/cyber-ranges:runtime-mysql" = "target:runtime-mysql"
-    "hominsu/cyber-ranges:runtime-tarball" = "target:runtime-tarball"
-  }
+  context    = "app/sqli-labs/"
   dockerfile = "Dockerfile"
   args       = {
     REPO         = REPO
@@ -134,11 +125,7 @@ target "sqli-labs" {
 }
 
 target "xss-labs" {
-  context  = "app/xss-labs/"
-  contexts = {
-    "hominsu/cyber-ranges:runtime-native" = "target:runtime-native"
-    "hominsu/cyber-ranges:runtime-tarball" = "target:runtime-tarball"
-  }
+  context    = "app/xss-labs/"
   dockerfile = "Dockerfile"
   args       = {
     REPO         = REPO
