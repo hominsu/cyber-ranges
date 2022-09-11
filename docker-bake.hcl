@@ -22,10 +22,13 @@ variable "SQLI_LABS_VERSION" {}
 
 variable "XSS_LABS_VERSION" {}
 
+variable "UPLOAD_LABS_VERSION" {}
+
 variable "ranges" {
   default = [
     "pikachu",
     "sqli-labs",
+    "upload-labs",
     "xss-labs",
   ]
 }
@@ -120,6 +123,21 @@ target "sqli-labs" {
   tags = [
     notequal("", SQLI_LABS_VERSION) ? "${REPO}/sqli-labs:${SQLI_LABS_VERSION}" : "",
     "${REPO}/sqli-labs:latest",
+  ]
+  platforms = ["linux/amd64"]
+}
+
+target "upload-labs" {
+  context    = "app/upload-labs/"
+  dockerfile = "Dockerfile"
+  args       = {
+    REPO         = REPO
+    AUTHOR_NAME  = AUTHOR_NAME
+    AUTHOR_EMAIL = AUTHOR_EMAIL
+  }
+  tags = [
+    notequal("", UPLOAD_LABS_VERSION) ? "${REPO}/upload-labs:${UPLOAD_LABS_VERSION}" : "",
+    "${REPO}/upload-labs:latest",
   ]
   platforms = ["linux/amd64"]
 }
