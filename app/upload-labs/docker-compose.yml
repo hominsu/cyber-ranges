@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  upload-labs:
+    image: hominsu/upload-labs:latest
+    container_name: upload-labs
+    restart: unless-stopped
+    environment:
+      TZ: "Asia/Shanghai"
+    ports:
+      - "80:80"
