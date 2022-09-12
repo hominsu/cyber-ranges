@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  cyber-ranges:
+    image: hominsu/cyber-ranges:latest
+    container_name: cyber-ranges
+    restart: unless-stopped
+    environment:
+      TZ: "Asia/Shanghai"
+    ports:
+      - "80:80"

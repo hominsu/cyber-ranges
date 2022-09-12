@@ -16,6 +16,8 @@ variable "RUNTIME_MYSQL_VERSION" {}
 
 variable "RUNTIME_TARBALL_VERSION" {}
 
+variable "CYBER_RANGES_VERSION" {}
+
 variable "PIKACHU_VERSION" {}
 
 variable "SQLI_LABS_VERSION" {}
@@ -93,6 +95,21 @@ target "runtime-tarball" {
   tags = [
     notequal("", RUNTIME_TARBALL_VERSION) ? "${REPO}/cyber-ranges:runtime-tarball-${RUNTIME_TARBALL_VERSION}" : "",
     "${REPO}/cyber-ranges:runtime-tarball",
+  ]
+  platforms = ["linux/amd64"]
+}
+
+target "cyber-ranges" {
+  context    = "app/cyber-ranges/"
+  dockerfile = "Dockerfile"
+  args       = {
+    REPO         = REPO
+    AUTHOR_NAME  = AUTHOR_NAME
+    AUTHOR_EMAIL = AUTHOR_EMAIL
+  }
+  tags = [
+    notequal("", CYBER_RANGES_VERSION) ? "${REPO}/cyber-ranges:${CYBER_RANGES_VERSION}" : "",
+    "${REPO}/cyber-ranges:latest",
   ]
   platforms = ["linux/amd64"]
 }
