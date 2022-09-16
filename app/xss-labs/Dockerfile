@@ -5,10 +5,11 @@ FROM hominsu/cyber-ranges:runtime-tarball as tarball
 
 ARG PREFIX=/xss-labs
 
-RUN mkdir ${PREFIX} && cd ${PREFIX} && \
+RUN set -eux; \
+    mkdir ${PREFIX}; \
+    cd ${PREFIX}; \
     curl -sL https://github.com/do0dl3/xss-labs/tarball/master | \
-    tar -zx --strip-components=1 && \
-    hash -r
+    tar -zx --strip-components=1
 
 # xss-labs
 FROM hominsu/cyber-ranges:runtime-native
