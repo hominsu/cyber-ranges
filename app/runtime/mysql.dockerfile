@@ -8,11 +8,11 @@ ARG AUTHOR_EMAIL
 # label
 LABEL author=${AUTHOR_NAME} email=${AUTHOR_EMAIL}
 
-RUN apt-get update && \
+RUN set -eux; \
+    apt-get update; \
     DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt-get install -y --no-install-recommends \
-    mysql-server php5-mysql && \
-    rm -rf /var/lib/apt/lists/* && \
-    hash -r
+    mysql-server php5-mysql; \
+    rm -rf /var/lib/apt/lists/*
 
 # https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
 STOPSIGNAL SIGWINCH

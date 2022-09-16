@@ -1,5 +1,5 @@
 FROM alpine:latest
 
-RUN apk update && \
-    apk add --no-cache ca-certificates curl && \
-    hash -r
+RUN set -eux; \
+    apk update; \
+    apk add --no-cache ca-certificates curl

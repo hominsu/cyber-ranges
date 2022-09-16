@@ -5,10 +5,11 @@ FROM hominsu/cyber-ranges:runtime-tarball as tarball
 
 ARG PREFIX=/pikachu
 
-RUN mkdir ${PREFIX} && cd ${PREFIX} && \
+RUN set -eux; \
+    mkdir ${PREFIX}; \
+    cd ${PREFIX}; \
     curl -sL https://github.com/zhuifengshaonianhanlu/pikachu/tarball/master | \
-    tar -zx --strip-components=1 && \
-    hash -r
+    tar -zx --strip-components=1
 
 # pikachu
 FROM hominsu/cyber-ranges:runtime-mysql
@@ -24,7 +25,7 @@ ARG DIR=pikachu
 
 COPY --from=tarball /pikachu ${PREFIX}/${DIR}
 
-RUN cd ${PREFIX}/${DIR} && \
-    sed "s/define('DBUSER', 'root');/\define('DBUSER', '$(cat /etc/mysql/debian.cnf | grep user | awk 'NR==1{print $3}')');/g" -i inc/config.inc.php && \
-    sed "s/define('DBPW', '');/define('DBPW', '$(cat /etc/mysql/debian.cnf | grep password | awk 'NR==1{print $3}')');/g" -i inc/config.inc.php && \
-    hash -r
+RUN set -eux; \
+    cd ${PREFIX}/${DIR}; \
+    sed "s/define('DBUSER', 'root');/\define('DBUSER', '$(cat /etc/mysql/debian.cnf | grep user | awk 'NR==1{print $3}')');/g" -i inc/config.inc.php; \
+    sed "s/define('DBPW', '');/define('DBPW', '$(cat /etc/mysql/debian.cnf | grep password | awk 'NR==1{print $3}')');/g" -i inc/config.inc.php

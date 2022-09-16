@@ -5,10 +5,11 @@ FROM hominsu/cyber-ranges:runtime-tarball as tarball
 
 ARG PREFIX=/sqli-labs
 
-RUN mkdir ${PREFIX} && cd ${PREFIX} && \
+RUN set -eux; \
+    mkdir ${PREFIX}; \
+    cd ${PREFIX}; \
     curl -sL https://github.com/Audi-1/sqli-labs/tarball/master | \
-    tar -zx --strip-components=1 && \
-    hash -r
+    tar -zx --strip-components=1
 
 # sqli-labs
 FROM hominsu/cyber-ranges:runtime-mysql
@@ -24,7 +25,7 @@ ARG DIR=sqli-labs
 
 COPY --from=tarball /sqli-labs ${PREFIX}/${DIR}
 
-RUN cd ${PREFIX}/${DIR} && \
-    sed "s/\$dbuser ='root';/\$dbuser ='$(cat /etc/mysql/debian.cnf | grep user | awk 'NR==1{print $3}')';/g" -i sql-connections/db-creds.inc && \
-    sed "s/\$dbpass ='';/\$dbpass ='$(cat /etc/mysql/debian.cnf | grep password | awk 'NR==1{print $3}')';/g" -i sql-connections/db-creds.inc && \
-    hash -r
+RUN set -eux; \
+    cd ${PREFIX}/${DIR}; \
+    sed "s/\$dbuser ='root';/\$dbuser ='$(cat /etc/mysql/debian.cnf | grep user | awk 'NR==1{print $3}')';/g" -i sql-connections/db-creds.inc; \
+    sed "s/\$dbpass ='';/\$dbpass ='$(cat /etc/mysql/debian.cnf | grep password | awk 'NR==1{print $3}')';/g" -i sql-connections/db-creds.inc

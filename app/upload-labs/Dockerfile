@@ -5,10 +5,11 @@ FROM hominsu/cyber-ranges:runtime-tarball as tarball
 
 ARG PREFIX=/upload-labs
 
-RUN mkdir ${PREFIX} && cd ${PREFIX} && \
+RUN set -eux; \
+    mkdir ${PREFIX}; \
+    cd ${PREFIX}; \
     curl -sL https://github.com/c0ny1/upload-labs/tarball/master | \
-    tar -zx --strip-components=1 && \
-    hash -r
+    tar -zx --strip-components=1
 
 # upload-labs
 FROM hominsu/cyber-ranges:runtime-native
